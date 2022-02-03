@@ -10,7 +10,6 @@ export async function getPaymentNotes(req: Request, res: Response) {
     const result = await connection.query(query);
     res.send(result);
   } catch (err) {
-    console.log(err);
     res.sendStatus(500);
   }
 }
@@ -38,7 +37,6 @@ export async function createPaymentNote(req: Request, res: Response) {
 
     res.sendStatus(200);
   } catch (err) {
-    console.log(err);
     res.sendStatus(500);
   }
 
@@ -64,7 +62,7 @@ export async function updatePaymentNote(
   const connection = await db.getConnection();
   const result = await connection.query(query, [
     transaction_count,
-    transaction_sum,
+    transaction_sum || 0,
     payment_note_uuid,
   ]);
 }

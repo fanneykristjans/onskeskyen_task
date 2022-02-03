@@ -39,7 +39,7 @@ export async function updateTransactionsFromPaymentNote(
 
     updatePaymentNote(payment_note_uuid, transaction_sum, transaction_count);
   } catch (err) {
-    console.log(err);
+    /* ignore, but log errors somewhere */
   }
 }
 
@@ -57,7 +57,6 @@ export async function getTransactionsByPaymentNoteId(
     const result = await connection.query(query, [uuid]);
     res.send(result);
   } catch (err) {
-    console.log(err);
     res.sendStatus(500);
   }
 }
