@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { db } from '../helpers/dbconnection';
+import { GetTransactionsResponse, UpdateTransactionsResponse } from './types';
 import { updatePaymentNote } from './../payment-notes/handler';
 
 export async function updateTransactionsFromPaymentNote(
@@ -23,13 +24,14 @@ export async function updateTransactionsFromPaymentNote(
 
   try {
     const connection = await db.getConnection();
+
     await connection.query(updateTransactionQuery, [
       payment_note_uuid,
       period_from_datetime,
       period_to_datetime,
     ]);
 
-    const result = await connection.query(
+    const result: UpdateTransactionsResponse = await connection.query(
       selectTransactionComputedValuesQuery,
       [payment_note_uuid]
     );
@@ -48,13 +50,19 @@ export async function getTransactionsByPaymentNoteId(
   res: Response
 ) {
   const uuid = req.params.paymentNoteId;
-  let query = `
+
+  const query = `
     SELECT * FROM transaction
     WHERE transaction_payment_note_uuid = ?
     `;
+
   try {
     const connection = await db.getConnection();
-    const result = await connection.query(query, [uuid]);
+
+    const result: GetTransactionsResponse = await connection.query(query, [
+      uuid,
+    ]);
+
     res.send(result);
   } catch (err) {
     res.sendStatus(500);

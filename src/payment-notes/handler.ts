@@ -2,9 +2,11 @@ import { Request, Response } from 'express';
 import { db } from '../helpers/dbconnection';
 import { updateTransactionsFromPaymentNote } from '../transactions/handler';
 import { v4 } from 'uuid';
+import { PaymentNoteRequest } from './types';
 
 export async function getPaymentNotes(req: Request, res: Response) {
   const query = 'SELECT * FROM payment_note';
+
   try {
     const connection = await db.getConnection();
     const result = await connection.query(query);
@@ -15,8 +17,9 @@ export async function getPaymentNotes(req: Request, res: Response) {
 }
 
 export async function createPaymentNote(req: Request, res: Response) {
-  const { period_from_datetime, period_to_datetime } = req.body;
   const payment_note_uuid = v4();
+  const { period_from_datetime, period_to_datetime } =
+    req.body as PaymentNoteRequest;
 
   const query = `
     INSERT INTO payment_note (
@@ -29,6 +32,7 @@ export async function createPaymentNote(req: Request, res: Response) {
 
   try {
     const connection = await db.getConnection();
+
     await connection.query(query, [
       payment_note_uuid,
       period_from_datetime,
@@ -49,8 +53,8 @@ export async function createPaymentNote(req: Request, res: Response) {
 
 export async function updatePaymentNote(
   payment_note_uuid: string,
-  transaction_sum: number,
-  transaction_count: number
+  transaction_sum: number = 0,
+  transaction_count: number = 0
 ) {
   const query = `
   UPDATE payment_note
@@ -59,10 +63,12 @@ export async function updatePaymentNote(
       payment_note_status_code = 'COMPLETED'
     WHERE payment_note_uuid = ?
   `;
+
   const connection = await db.getConnection();
+
   await connection.query(query, [
     transaction_count,
-    transaction_sum || 0,
+    transaction_sum,
     payment_note_uuid,
   ]);
 }
