@@ -1,9 +1,9 @@
-import mysql from 'mysql';
+import mysql from 'mysql2';
 
 class Database {
   private mysql: mysql.Pool;
 
-  constructor(config: mysql.PoolConfig) {
+  constructor(config: mysql.PoolOptions) {
     this.mysql = mysql.createPool({
       host: config.host,
       user: config.user,
@@ -40,7 +40,7 @@ class Connection {
 }
 
 export const db = new Database({
-  host: '127.0.0.1',
+  host: 'localhost',
   user: 'testuser',
   password: 'testsecret',
   database: 'onskeskyendb',
