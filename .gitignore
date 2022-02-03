@@ -1,0 +1,16 @@
+# mac os
+.DS_Store
+
+# vs code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# nodejs compiled
+/dist
+/node_modules
+
+# env
+*.env
