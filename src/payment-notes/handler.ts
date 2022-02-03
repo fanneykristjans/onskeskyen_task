@@ -60,7 +60,7 @@ export async function updatePaymentNote(
     WHERE payment_note_uuid = ?
   `;
   const connection = await db.getConnection();
-  const result = await connection.query(query, [
+  await connection.query(query, [
     transaction_count,
     transaction_sum || 0,
     payment_note_uuid,
