@@ -5,10 +5,10 @@ class Database {
 
   constructor(config: mysql.PoolConfig) {
     this.mysql = mysql.createPool({
-      host: '127.0.0.1',
-      user: 'testuser',
-      password: 'testsecret',
-      database: 'onskeskyendb',
+      host: config.host,
+      user: config.user,
+      password: config.password,
+      database: config.database,
     });
   }
 
